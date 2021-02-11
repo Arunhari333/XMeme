@@ -1,0 +1,26 @@
+.card {
+    padding: 10px;
+    text-align: center;
+    width: 30%;
+    background-color: honeydew;
+}
+
+#creator {
+    padding: 5px;
+}
+
+#caption {
+    padding: 5px;
+}
+
+#image {
+    max-height: 100%;
+    max-width: 100%;
+}
+
+.card-single {
+    padding: 10px;
+    text-align: center;
+    width: 100%;
+    padding-bottom: 135px;
+}

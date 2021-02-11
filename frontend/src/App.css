@@ -1,0 +1,19 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'PT Sans', sans-serif;
+  }
+
+.parent {
+  padding: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3em;
+  background-color: rgb(184, 231, 223);
+  height: 100%;
+}
+
+.single-outer {
+  background-color: rgb(184, 231, 223);
+}

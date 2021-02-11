@@ -1,0 +1,24 @@
+.header {
+    width: 100%;
+    text-align: center;
+    background-color: rgb(29, 27, 27);
+    color: white;
+    padding: 20px;
+}
+
+.show-form {
+    background-color: tomato;
+    padding: 10px;
+    margin: 20px;
+    color: black;
+}
+
+.layout {
+    display: flex;
+    background-color: rgb(184, 231, 223);
+}
+
+.list {
+    text-decoration: none;
+    margin-left: auto;
+}
