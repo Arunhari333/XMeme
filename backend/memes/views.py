@@ -31,6 +31,8 @@ def meme_list(request):
                 return Response({"Status code": "409"})
         if serializer.is_valid():
             serializer.save()
+        else:
+            return Response({"Status code": "422"})
         new = Meme.objects.all().order_by('-id')[0]
         return Response({"id": new.id})
 
