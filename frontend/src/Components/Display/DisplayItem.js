@@ -24,7 +24,8 @@ export class DisplayItem extends Component {
 }
 
 DisplayItem.propTypes = {
-    meme: PropTypes.object.isRequired
+    meme: PropTypes.object.isRequired,
+    getMeme: PropTypes.func.isRequired
 }
 
 export default DisplayItem

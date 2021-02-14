@@ -2,8 +2,11 @@
     width: 100%;
     text-align: center;
     background-color: rgb(29, 27, 27);
-    color: white;
     padding: 20px;
+}
+
+.header h1{
+    color: white;
 }
 
 .show-form {

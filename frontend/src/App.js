@@ -43,7 +43,7 @@ export class App extends Component {
 
   getMemes = () => {
     console.log('Fetching...')
-    let url = 'http://arunhari.pythonanywhere.com/api/memes';
+    let url = 'https://arunhari.pythonanywhere.com/api/memes';
     fetch(url)
     .then(response => response.json())
     .then(data => this.setState({
@@ -59,9 +59,8 @@ export class App extends Component {
   addMeme = (data) => {
     this.setState({ activeItem: data },
       () => {
-        console.log('Item:', this.state.activeItem)
         let csrftoken = this.getCookie('csrftoken');
-        let url = 'http://arunhari.pythonanywhere.com/api/memes';
+        let url = 'https://arunhari.pythonanywhere.com/api/memes';
         fetch(url, {
           'method': 'POST',
           'headers': {
@@ -71,7 +70,6 @@ export class App extends Component {
           'body': JSON.stringify(this.state.activeItem)
         }).then(response => response.json())
           .then(data => {
-            console.log(data);
             this.getMemes();
             if(!data.id){
               this.setState({response: 'Duplicate memes are not allowed'});
@@ -79,7 +77,6 @@ export class App extends Component {
             else if(this.state.response !== ''){
               this.setState({response: ''});
             }
-            console.log(this.state.response);
             this.setState({
               activeItem: {
                 name: '',
@@ -95,9 +92,8 @@ export class App extends Component {
   editMeme = (data, id) => {
     this.setState({ activeItem: data },
       () => {
-        console.log('Item:', this.state.activeItem)
         let csrftoken = this.getCookie('csrftoken');
-        let url = `http://arunhari.pythonanywhere.com/api/memes/edit/${id}`;
+        let url = `https://arunhari.pythonanywhere.com/api/memes/edit/${id}`;
         fetch(url, {
           'method': 'PATCH',
           'headers': {
@@ -105,17 +101,17 @@ export class App extends Component {
             'X-CSRFToken': csrftoken,
           },
           'body': JSON.stringify(this.state.activeItem)
-        }).then(response => {
-          console.log(response);
-          this.getMemes();
-          this.setState({
-            activeItem: {
-              name: '',
-              caption: '',
-              url: '',
-            }
-          });
-          window.location.replace('/');
+        }).then(response => response.json())
+          .then(response => {
+            this.getMemes();
+            this.setState({
+              activeItem: {
+                name: '',
+                caption: '',
+                url: '',
+              }
+            });
+            window.location.replace('/');
         }).catch(err => console.log('ERROR: ', err))
       }
     );
@@ -124,16 +120,17 @@ export class App extends Component {
   delMeme = (id) => {
     console.log('Deleting Item', id)
     let csrftoken = this.getCookie('csrftoken');
-    let url = `http://arunhari.pythonanywhere.com/api/memes/delete/${id}`;
+    let url = `https://arunhari.pythonanywhere.com/api/memes/delete/${id}`;
     fetch(url, {
       'method': 'DELETE',
       'headers': {
         'Content-type': 'application/json',
         'X-CSRFToken': csrftoken,
       },
-    }).then(response => {
-      this.getMemes();
-      window.location.replace('/');
+    }).then(response => response.json())
+      .then(response => {
+        this.getMemes();
+        window.location.replace('/');
     }).catch(err => console.log('ERROR: ', err))
   }
 

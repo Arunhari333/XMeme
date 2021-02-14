@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 import './Display.css'
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 export class DisplaySingle extends Component {
     render() {
-        console.log(this.props.meme);
         const {id, name, caption, url} = this.props.meme;
         return (
             <div className="single-outer">
@@ -27,6 +27,11 @@ export class DisplaySingle extends Component {
             </div>
         )
     }
+}
+
+DisplaySingle.propTypes = {
+    meme: PropTypes.object.isRequired,
+    delMeme: PropTypes.func.isRequired
 }
 
 export default DisplaySingle

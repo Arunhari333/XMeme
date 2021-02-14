@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import './Form.css';
 import { Link } from "react-router-dom";
+import PropTypes from 'prop-types';
 
 export class Form extends Component {
     constructor(props){
@@ -23,7 +24,6 @@ export class Form extends Component {
     }
     validate = () => {
         const {name, caption, url} = this.state;
-        console.log(name, caption, url);
         const errors = this.state.errors;
         const regex = RegExp('(http|https)://');
         errors.name = (name === '') ? 'Name field cannot be empty' : '';
@@ -87,5 +87,11 @@ export class Form extends Component {
         )
     }
 }
+
+Form.propTypes = {
+    response: PropTypes.string.isRequired,
+    addMeme: PropTypes.func.isRequired
+}
+
 
 export default Form

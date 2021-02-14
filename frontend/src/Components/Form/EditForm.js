@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
 import './Form.css';
 import { Link } from "react-router-dom";
+import PropTypes from 'prop-types';
 
 export class EditForm extends Component {
     constructor(props){
         super(props);
-        console.log(this.props.meme);
         const {name, caption, url} = this.props.meme;
         this.state = {
             name: name,
@@ -21,7 +21,6 @@ export class EditForm extends Component {
 
     validate = () => {
         const {name, caption, url} = this.state;
-        console.log(name, caption, url);
         const errors = this.state.errors;
         const regex = RegExp('(http|https)://');
         errors.name = (name === '') ? 'Name field cannot be empty' : '';
@@ -64,7 +63,7 @@ export class EditForm extends Component {
                                 meme: this.props.meme
                             }
                         }} style={{textDecoration: 'none'}}>x</Link></span>
-                        <h1>Add a Meme</h1>
+                        <h1>Edit Meme</h1>
                         <div className='form-inputs'>
                             <label htmlFor="name" className="form-label">Name (Non-editable)</label>
                             <input type="text" id="name" name="name" placeholder="Enter your name" 
@@ -88,6 +87,11 @@ export class EditForm extends Component {
                 </div>
         )
     }
+}
+
+EditForm.propTypes = {
+    meme: PropTypes.object.isRequired,
+    editMeme: PropTypes.func.isRequired
 }
 
 export default EditForm
