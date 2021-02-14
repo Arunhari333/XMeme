@@ -2,17 +2,23 @@ import React, { Component } from 'react'
 import './Form.css';
 import { Link } from "react-router-dom";
 
-export class Form extends Component {
-    state = {
-        name: '',
-        caption: '',
-        url: '',
-        errors: {
-            name: '',
-            caption: '',
-            url: ''
+export class EditForm extends Component {
+    constructor(props){
+        super(props);
+        console.log(this.props.meme);
+        const {name, caption, url} = this.props.meme;
+        this.state = {
+            name: name,
+            caption: caption,
+            url: url,
+            errors: {
+                name: '',
+                caption: '',
+                url: ''
+            }
         }
     }
+
     validate = () => {
         const {name, caption, url} = this.state;
         console.log(name, caption, url);
@@ -44,39 +50,44 @@ export class Form extends Component {
         e.preventDefault();
         if(this.validate()){
             const {errors, ...data} = this.state;
-            this.props.addMeme(data);
-            this.setState({name: '', caption: '', url: ''});
+            this.props.editMeme(data, this.props.meme.id);
         }
     }
     render() {
+        const {id} = this.props.meme;
         return (
                 <div>
                     <form className="form" onSubmit={this.handleSubmit}>
-                        <span className='close-btn'><Link to='/' style={{textDecoration: 'none'}}>x</Link></span>
+                        <span className='close-btn'><Link to={{
+                            pathname:`../${id}`,
+                            state: {
+                                meme: this.props.meme
+                            }
+                        }} style={{textDecoration: 'none'}}>x</Link></span>
                         <h1>Add a Meme</h1>
                         <div className='form-inputs'>
-                            <label htmlFor="name" className="form-label">Name</label>
+                            <label htmlFor="name" className="form-label">Name (Non-editable)</label>
                             <input type="text" id="name" name="name" placeholder="Enter your name" 
-                                className='form-input' onChange={this.handleChange}/>
+                                className='form-input' onChange={this.handleChange} value={this.state.name} readOnly/>
                             <p className="err">{this.state.errors.name}</p>
                         </div>
                         <div className='form-inputs'>
                             <label htmlFor="caption" className="form-label">Caption</label>
                             <input type="text" id="caption" name="caption" placeholder="Enter the caption" 
-                                className='form-input' onChange={this.handleChange}/>
+                                className='form-input' onChange={this.handleChange} value={this.state.caption}/>
                             <p className="err">{this.state.errors.caption}</p>
                         </div>
                         <div className='form-inputs'>
                             <label htmlFor="url" className="form-label">Meme URL</label>
                             <input type="text" id="url" name="url" placeholder="Enter the URL of the meme image" 
-                                className='form-input' onChange={this.handleChange}/>
+                                className='form-input' onChange={this.handleChange} value={this.state.url}/>
                             <p className="err">{this.state.errors.url}</p>
                         </div>
-                        <button type="submit" className="form-input-btn">Post Meme</button>
+                        <button type="submit" className="form-input-btn">Edit Meme</button>
                     </form>
                 </div>
         )
     }
 }
 
-export default Form
+export default EditForm

@@ -5,55 +5,129 @@ import Form from './Components/Form/Form';
 import Header from './Components/Header/Header';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import DisplaySingle from './Components/Display/DisplaySingle';
+import EditForm from './Components/Form/EditForm';
 
 export class App extends Component {
-  addMeme = (data) => {
-    console.log(data);
-  }
-  getMemes = () => {
-    const memes = [
-      {
-        id: '1',
-        creator: 'Arun',
-        caption: 'Corona Go',
-        memeUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSF8uUG9ZOW9A0I8urub2RQtrROomj7dK8sIA&usqp=CAU'
+  constructor(props){
+    super(props);
+    this.state = {
+      memes: [],
+      activeItem: {
+        name: '',
+        caption: '',
+        url: '',
       },
-      {
-        id: '2',
-        creator: 'Aswin',
-        caption: 'Hows it going here',
-        memeUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTR2B-RnQm-8htF0znTzYMibAFRcpeAZRq6Bg&usqp=CAU'
-      },
-      {
-        id: '3',
-        creator: 'Arundhathi',  
-        caption: 'Tall Building',
-        memeUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR28wDV5zk9bCkOe4bPVm_Vwb6J72h-UeP4-w&usqp=CAU'
-      },
-      {
-        id: '4',
-        creator: 'AGZ',
-        caption: 'Hows it going here',
-        memeUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTR2B-RnQm-8htF0znTzYMibAFRcpeAZRq6Bg&usqp=CAU'
-      },
-      {
-        id: '5',
-        creator: 'Sneha',
-        caption: 'Tall Building',
-        memeUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR28wDV5zk9bCkOe4bPVm_Vwb6J72h-UeP4-w&usqp=CAU'
       }
-    ]
-    return memes;
+    this.getMemes = this.getMemes.bind(this)
   }
-  getMeme = (id) => {
-    const meme = {
-      id: '1',
-      creator: 'Arun',
-      caption: 'Good meme',
-      memeUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSF8uUG9ZOW9A0I8urub2RQtrROomj7dK8sIA&usqp=CAU'
+
+  getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
     }
+    return cookieValue;
+  }
+
+  UNSAFE_componentWillMount(){
+    this.getMemes();
+  }
+
+  getMemes = () => {
+    console.log('Fetching...')
+    let url = 'http://arunhari.pythonanywhere.com/api/memes';
+    fetch(url)
+    .then(response => response.json())
+    .then(data => this.setState({
+      memes: data
+    }))
+    .catch(() => console.log("Can’t access " + url + " response."))
+  }
+
+  getMeme = (meme) => {
     return meme;
   }
+
+  addMeme = (data) => {
+    this.setState({ activeItem: data },
+      () => {
+        console.log('Item:', this.state.activeItem)
+        let csrftoken = this.getCookie('csrftoken');
+        let url = 'http://arunhari.pythonanywhere.com/api/memes';
+        fetch(url, {
+          'method': 'POST',
+          'headers': {
+            'Content-type': 'application/json',
+            'X-CSRFToken': csrftoken,
+          },
+          'body': JSON.stringify(this.state.activeItem)
+        }).then(response => {
+          console.log(response);
+          this.getMemes();
+          this.setState({
+            activeItem: {
+              name: '',
+              caption: '',
+              url: '',
+            }
+          })
+        }).catch(err => console.log('ERROR: ', err))
+      }
+    );
+  }
+
+  editMeme = (data, id) => {
+    this.setState({ activeItem: data },
+      () => {
+        console.log('Item:', this.state.activeItem)
+        let csrftoken = this.getCookie('csrftoken');
+        let url = `http://arunhari.pythonanywhere.com/api/memes/edit/${id}`;
+        fetch(url, {
+          'method': 'PATCH',
+          'headers': {
+            'Content-type': 'application/json',
+            'X-CSRFToken': csrftoken,
+          },
+          'body': JSON.stringify(this.state.activeItem)
+        }).then(response => {
+          console.log(response);
+          this.getMemes();
+          this.setState({
+            activeItem: {
+              name: '',
+              caption: '',
+              url: '',
+            }
+          })
+          window.location.replace('/');
+        }).catch(err => console.log('ERROR: ', err))
+      }
+    );
+  }
+
+  delMeme = (id) => {
+    console.log('Deleting Item', id)
+    let csrftoken = this.getCookie('csrftoken');
+    let url = `http://arunhari.pythonanywhere.com/api/memes/delete/${id}`;
+    fetch(url, {
+      'method': 'DELETE',
+      'headers': {
+        'Content-type': 'application/json',
+        'X-CSRFToken': csrftoken,
+      },
+    }).then(response => {
+      this.getMemes();
+      window.location.replace('/');
+    }).catch(err => console.log('ERROR: ', err))
+  }
+
   render() {
     return (
       <Router>
@@ -61,18 +135,26 @@ export class App extends Component {
         <Header/>
         <Route exact path='/' render={props => (
           <div className="parent">
-            <Display memes={this.getMemes()} getMeme={this.getMeme}/>
+            <Display memes={this.state.memes} getMeme={this.getMeme}/>
           </div>
         )} />
         <Route exact path='/addMeme' render={props => (
           <div className="parent">
-            <Display memes={this.getMemes()} getMeme={this.getMeme}/>
+            <Display memes={this.state.memes} getMeme={this.getMeme}/>
             <Form addMeme={this.addMeme}/>
           </div>
         )} />
         <div className="parent">
           <Route exact path='/memes/:id' render={props => (
-            <DisplaySingle meme={this.getMeme()}/>
+            <DisplaySingle meme={props.location.state.meme} delMeme={this.delMeme}/>
+          )} />
+        </div>
+        <div className="parent">
+          <Route exact path='/memes/edit/:id' render={props => (
+            <React.Fragment>
+              <DisplaySingle meme={props.location.state.meme} delMeme={this.delMeme}/>
+              <EditForm meme={props.location.state.meme} editMeme={this.editMeme}/>
+            </React.Fragment>
           )} />
         </div>
       </div>

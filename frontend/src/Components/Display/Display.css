@@ -5,11 +5,11 @@
     background-color: honeydew;
 }
 
-#creator {
+.name {
     padding: 5px;
 }
 
-#caption {
+.caption {
     padding: 5px;
 }
 
@@ -18,9 +18,40 @@
     max-width: 100%;
 }
 
+#image-single {
+    width: 100%;
+    margin: 10px;
+}
+
+.single-outer {
+    margin-left: auto;
+    margin-right: auto;
+    width: 40%;
+}
+
 .card-single {
     padding: 10px;
     text-align: center;
-    width: 100%;
-    padding-bottom: 135px;
+    background-color: white;
+    margin-bottom: 20px;
+}
+
+.btns {
+    display: flex;
+    gap: 3em;
+    justify-content: center;
+}
+
+#edit {
+    padding: 10px;
+    background-color: green;
+    cursor: pointer;
+    border-radius: 5%;
+}
+
+#del {
+    padding: 10px;
+    background-color: red;
+    cursor: pointer;
+    border-radius: 5%;
 }

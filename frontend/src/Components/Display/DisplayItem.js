@@ -5,13 +5,18 @@ import { Link } from 'react-router-dom';
 
 export class DisplayItem extends Component {
     render() {
-        const {id, creator, caption, memeUrl} = this.props.meme;
+        const {id, name, caption, url} = this.props.meme;
         return (
             <div className="card">
-                <Link to={`/memes/${id}`} query={{meme: this.props.getMeme.bind(this, id)}} className='list'>
-                    <p id="creator">Created by {creator}</p>
-                    <p id="caption">{caption}</p>
-                    <img src={memeUrl} alt="Meme" id="image"></img>
+                <Link to={{
+                    pathname:`./memes/${id}`,
+                    state: {
+                        meme: this.props.meme
+                    }
+                }} className='list'>
+                    <p className="name">Created by {name}</p>
+                    <p className="caption">{caption}</p>
+                    <img src={url} alt="Meme" id="image"></img>
                 </Link>
             </div>
         )
