@@ -8,6 +8,7 @@ export class DisplayItem extends Component {
         const {id, name, caption, url} = this.props.meme;
         return (
             <div className="card">
+                {/* The card is linked to the page which displays an individual meme */}
                 <Link to={{
                     pathname:`./memes/${id}`,
                     state: {
@@ -24,8 +25,7 @@ export class DisplayItem extends Component {
 }
 
 DisplayItem.propTypes = {
-    meme: PropTypes.object.isRequired,
-    getMeme: PropTypes.func.isRequired
+    meme: PropTypes.object.isRequired
 }
 
 export default DisplayItem

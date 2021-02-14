@@ -17,20 +17,25 @@ export class Form extends Component {
             }
         }
     }
+
     getStyle = () => {
         return{
             marginTop: '10px',
         }
     }
+
+    //This function validates the inputs submitted by the user
     validate = () => {
         const {name, caption, url} = this.state;
         const errors = this.state.errors;
         const regex = RegExp('(http|https)://');
+        //Displays error if any of the input fields are empty
         errors.name = (name === '') ? 'Name field cannot be empty' : '';
         errors.caption = (caption === '') ? 'Caption field cannot be empty' : '';
         if(url === ''){
             errors.url = 'Meme URL field cannot be empty';
         }
+        //Displays error if the meme URL is invalid
         else if(!regex.test(url)){
             errors.url = 'Invalid URL';
         }
@@ -43,11 +48,15 @@ export class Form extends Component {
         }
         return false;
     }
+
+    //Sets the state when the user changes the input value
     handleChange = (e) => {
         this.setState({
             [e.target.name]: e.target.value
         });
     }
+    
+    //Handles form submission
     handleSubmit = (e) => {
         e.preventDefault();
         if(this.validate()){
@@ -56,6 +65,8 @@ export class Form extends Component {
             this.setState({name: '', caption: '', url: ''});
         }
     }
+    
+    //Displays the labels, inputs and errors
     render() {
         return (
                 <div>

@@ -13,6 +13,7 @@ export class DisplaySingle extends Component {
                     <p className="caption">{caption}</p>
                     <img src={url} alt="Meme" id="image-single"></img>
                     <div className="btns">
+                        {/* This button takes user to the edit form */}
                         <Link to={{
                             pathname:`./edit/${id}`,
                             state: {
@@ -21,6 +22,7 @@ export class DisplaySingle extends Component {
                         }} className='list'>
                             <div id="edit">Edit</div>
                         </Link>
+                        {/* This button deletes the meme */}
                         <div id="del" onClick={this.props.delMeme.bind(this, id)}>Delete</div>
                     </div>
                 </div>

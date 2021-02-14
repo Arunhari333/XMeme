@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import PropTypes from 'prop-types';
 
 export class EditForm extends Component {
+
+    //Initaializes the state with the data of the selected meme
     constructor(props){
         super(props);
         const {name, caption, url} = this.props.meme;
@@ -19,15 +21,18 @@ export class EditForm extends Component {
         }
     }
 
+    //This function validates the inputs submitted by the user
     validate = () => {
         const {name, caption, url} = this.state;
         const errors = this.state.errors;
         const regex = RegExp('(http|https)://');
+        //Displays error if any of the input fields are empty
         errors.name = (name === '') ? 'Name field cannot be empty' : '';
         errors.caption = (caption === '') ? 'Caption field cannot be empty' : '';
         if(url === ''){
             errors.url = 'Meme URL field cannot be empty';
         }
+        //Displays error if the meme URL is invalid
         else if(!regex.test(url)){
             errors.url = 'Invalid URL';
         }
@@ -40,18 +45,25 @@ export class EditForm extends Component {
         }
         return false;
     }
+
+    //Sets the state when the user changes the input value
     handleChange = (e) => {
         this.setState({
             [e.target.name]: e.target.value
         });
     }
+
+    //Handles form submission
     handleSubmit = (e) => {
         e.preventDefault();
         if(this.validate()){
             const {errors, ...data} = this.state;
-            this.props.editMeme(data, this.props.meme.id);
+            const {name, ...lastTwo} = data;
+            this.props.editMeme(lastTwo, this.props.meme.id);
         }
     }
+
+    //Displays the labels, inputs and errors
     render() {
         const {id} = this.props.meme;
         return (
@@ -66,6 +78,7 @@ export class EditForm extends Component {
                         <h1>Edit Meme</h1>
                         <div className='form-inputs'>
                             <label htmlFor="name" className="form-label">Name (Non-editable)</label>
+                            {/* Made the field non-editable as name should not be edited */}
                             <input type="text" id="name" name="name" placeholder="Enter your name" 
                                 className='form-input' onChange={this.handleChange} value={this.state.name} readOnly/>
                             <p className="err">{this.state.errors.name}</p>
