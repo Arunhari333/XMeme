@@ -17,7 +17,8 @@ export class App extends Component {
         caption: '',
         url: '',
       },
-      }
+      response: ''
+    }
     this.getMemes = this.getMemes.bind(this)
   }
 
@@ -68,15 +69,23 @@ export class App extends Component {
             'X-CSRFToken': csrftoken,
           },
           'body': JSON.stringify(this.state.activeItem)
-        }).then(response => {
-          console.log(response);
-          this.getMemes();
-          this.setState({
-            activeItem: {
-              name: '',
-              caption: '',
-              url: '',
+        }).then(response => response.json())
+          .then(data => {
+            console.log(data);
+            this.getMemes();
+            if(!data.id){
+              this.setState({response: 'Duplicate memes are not allowed'});
             }
+            else if(this.state.response !== ''){
+              this.setState({response: ''});
+            }
+            console.log(this.state.response);
+            this.setState({
+              activeItem: {
+                name: '',
+                caption: '',
+                url: '',
+              }
           })
         }).catch(err => console.log('ERROR: ', err))
       }
@@ -105,7 +114,7 @@ export class App extends Component {
               caption: '',
               url: '',
             }
-          })
+          });
           window.location.replace('/');
         }).catch(err => console.log('ERROR: ', err))
       }
@@ -141,7 +150,7 @@ export class App extends Component {
         <Route exact path='/addMeme' render={props => (
           <div className="parent">
             <Display memes={this.state.memes} getMeme={this.getMeme}/>
-            <Form addMeme={this.addMeme}/>
+            <Form addMeme={this.addMeme} response={this.state.response}/>
           </div>
         )} />
         <div className="parent">

@@ -3,14 +3,22 @@ import './Form.css';
 import { Link } from "react-router-dom";
 
 export class Form extends Component {
-    state = {
-        name: '',
-        caption: '',
-        url: '',
-        errors: {
+    constructor(props){
+        super(props);
+        this.state = {
             name: '',
             caption: '',
-            url: ''
+            url: '',
+            errors: {
+                name: '',
+                caption: '',
+                url: ''
+            }
+        }
+    }
+    getStyle = () => {
+        return{
+            marginTop: '10px',
         }
     }
     validate = () => {
@@ -43,7 +51,7 @@ export class Form extends Component {
     handleSubmit = (e) => {
         e.preventDefault();
         if(this.validate()){
-            const {errors, ...data} = this.state;
+            const {errors, response, ...data} = this.state;
             this.props.addMeme(data);
             this.setState({name: '', caption: '', url: ''});
         }
@@ -57,22 +65,23 @@ export class Form extends Component {
                         <div className='form-inputs'>
                             <label htmlFor="name" className="form-label">Name</label>
                             <input type="text" id="name" name="name" placeholder="Enter your name" 
-                                className='form-input' onChange={this.handleChange}/>
+                                className='form-input' value={this.state.name} onChange={this.handleChange}/>
                             <p className="err">{this.state.errors.name}</p>
                         </div>
                         <div className='form-inputs'>
                             <label htmlFor="caption" className="form-label">Caption</label>
                             <input type="text" id="caption" name="caption" placeholder="Enter the caption" 
-                                className='form-input' onChange={this.handleChange}/>
+                                className='form-input' value={this.state.caption} onChange={this.handleChange}/>
                             <p className="err">{this.state.errors.caption}</p>
                         </div>
                         <div className='form-inputs'>
                             <label htmlFor="url" className="form-label">Meme URL</label>
                             <input type="text" id="url" name="url" placeholder="Enter the URL of the meme image" 
-                                className='form-input' onChange={this.handleChange}/>
+                                className='form-input' value={this.state.url} onChange={this.handleChange}/>
                             <p className="err">{this.state.errors.url}</p>
                         </div>
                         <button type="submit" className="form-input-btn">Post Meme</button>
+                        <p className="err" style={this.getStyle()}>{this.props.response}</p>
                     </form>
                 </div>
         )
