@@ -1,4 +1,4 @@
 #!/bin/bash
-cd XMeme/backend
+cd backend
 chmod +x runserver
 ./runserver
