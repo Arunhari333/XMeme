@@ -1,4 +1,4 @@
 #!/bin/bash
+
 cd backend
-chmod +x runserver
-./runserver
+exec ./manage.py runserver 0.0.0.0:8081
